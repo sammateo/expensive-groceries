@@ -1,47 +1,39 @@
 "use client";
+import { ListItem } from "@/types/item";
 import Link from "next/link";
 import React from "react";
 import { MdDeleteOutline, MdEdit } from "react-icons/md";
 import { RiExpandDiagonalLine } from "react-icons/ri";
 import { toast } from "react-toastify";
 
-export default function Card({
-	id,
-	name,
-	cost,
-	list_items,
-}: {
-	id: string;
-	name: string;
-	cost: number;
-	list_items?: [
-		{
-			id: string;
-			name: string;
-			cost: number;
-		}
-	];
-}) {
+export default function Card({ list_item }: { list_item: ListItem }) {
 	return (
 		<div
-			key={id}
+			key={list_item.id}
 			className="shadow-md mx-auto py-4 px-4 rounded flex justify-between items-center w-full"
 		>
 			<div>
-				<p className="text-lg">{name}</p>
-				{/* <div className="flex items-center text-sm gap-2">
-					<p>${cost}</p>
+				<p className="text-lg">{list_item.item_name}</p>
+				<div className="flex items-center text-sm gap-2">
+					<p>${list_item.cost}</p>
+					<p>x</p>
+					<p>{list_item.quantity} items</p>
 					<p>|</p>
-					<p>{list_items?.length} items</p>
-				</div> */}
+					<p>
+						$
+						{(
+							Number(list_item.quantity) * Number(list_item.cost)
+						).toFixed(2)}
+					</p>
+				</div>
 			</div>
 			<div className="flex items-center gap-x-2">
-				<Link href={`/lists/view/${id}`}>
+				{/* <Link href={`/lists/view/${id}`}>
 					<RiExpandDiagonalLine className="text-xl cursor-pointer hover:text-green-600" />
-				</Link>
-				<Link href={`/lists/edit/${id}`}>
+				</Link> */}
+				{/* <Link href={`/lists/edit/${id}`}>
 					<MdEdit className="text-xl cursor-pointer hover:text-blue-600" />
-				</Link>
+				</Link> */}
 				<MdDeleteOutline
 					className=" text-2xl cursor-pointer hover:text-red-500"
 					onClick={async () => {
@@ -50,12 +42,16 @@ export default function Card({
 								"Are you sure you want to delete this item?"
 							)
 						) {
-							const response = await fetch("/api/list", {
-								method: "DELETE",
-								body: JSON.stringify({
-									list_id: id,
-								}),
-							});
+							console.log(list_item);
+							const response = await fetch(
+								"/api/list/list_item",
+								{
+									method: "DELETE",
+									body: JSON.stringify({
+										list_item_id: list_item.id,
+									}),
+								}
+							);
 							if (response.ok) {
 								toast.success("List successfully deleted.");
 								window.location.reload();

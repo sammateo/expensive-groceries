@@ -8,6 +8,10 @@ export default async function page() {
 	const { data: lists } = await supabase.from("lists").select();
 	const { data: items } = await supabase.from("item").select();
 
+	// lists?.forEach(list => {
+	// 	list.cost =
+	// })
+
 	return (
 		<div className="mx-auto max-w-screen-lg px-4">
 			<h1 className="w-fit mx-auto text-3xl my-2">Lists</h1>
@@ -26,14 +30,14 @@ export default async function page() {
 						// 	(x) => x. == list.id
 						// );
 						return (
-							// <Card
-							// 	id={item.id}
-							// 	name={item.name}
-							// 	cost={item.cost}
-							// 	key={item.id}
-							// 	// category={itemCount}
-							// />
-							<div key={list.id}></div>
+							<Card
+								id={list.id}
+								name={list.name}
+								cost={list.cost}
+								key={list.id}
+								// list_items={null}								// category={itemCount}
+							/>
+							// <div key={list.id}></div>
 						);
 					})}
 			</div>
